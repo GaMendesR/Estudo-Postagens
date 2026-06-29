@@ -7,6 +7,7 @@ import express from "express";
 import { Sequelize } from "sequelize";
 import { engine } from "express-handlebars";
 import bodyParser from "body-parser";
+import { Post } from "./models/Post.js";
 
 
 // Conexão com o Banco de dados MySQL
@@ -25,13 +26,25 @@ app.set("view engine", "handlebars");
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
+app.get("/", function(req, res){
+    res.render("home")
+});
 
 app.get("/cad", function(req, res) {
     res.render("formulario")
 });
 
 app.post("/add", function(req, res) {
-    res.send("Texto: "+req.body.titulo + " Conteúdo: "+req.body.conteudo)
+    Post.create({
+        titulo: req.body.titulo,
+        conteudo: req.body.conteudo
+    }).then(function(){
+        res.redirect("/")
+    }).catch(function(erro){
+        res.send("Erro na criação do Post: "+erro)
+    });
+
+
 });
 
 app.listen(8081, function(){
