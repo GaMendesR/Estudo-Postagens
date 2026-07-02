@@ -9,6 +9,6 @@ const Post = db.sequelize.define("postagens", {
     }
 });
 
-//Post.sync({force: true})
+await Post.sync();  // Cria a tabela apenas se não existir
 
 export { Post }
